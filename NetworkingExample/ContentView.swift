@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct Response: Codable {
-    var results: [Result]
+struct SongSearchResponse: Codable {
+    var results: [Song]
 }
 
-struct Result: Codable {
+struct Song: Codable {
     var trackId: Int
     var trackName: String
     var collectionName: String
@@ -25,7 +25,9 @@ struct User:Decodable {
 }
 
 struct ContentView: View {
-    @State private var results = [Result]()
+    @State private var results = [Song]()
+    
+    
     var responseService = ResponseService()
     
     @State var userName = ""
@@ -68,10 +70,7 @@ struct ContentView: View {
     func loadData() async {
         do {
             let url = try SongFetcherAPI(scheme: "https", host: "itunes.apple.com").searchURL()
-            let (data, _) = try await URLSession.shared.data(from: url)
-            if let decodedResponse = try? JSONDecoder().decode(Response.self, from: data) {
-                results = decodedResponse.results
-            }
+            results = try await responseService.fetchValue(ofType: SongSearchResponse.self, from: url).results
         } catch {
             print("Invalid data")
         }
