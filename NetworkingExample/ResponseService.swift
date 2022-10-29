@@ -17,7 +17,7 @@ actor ResponseService {
         return decoded
     }
     
-    func value<SomeDecodable: Decodable, Transformed>(
+    func fetchTransformedValue<SomeDecodable: Decodable, Transformed>(
         ofType: SomeDecodable.Type,
         from url:URL,
         transform: @escaping (SomeDecodable) throws -> Transformed
