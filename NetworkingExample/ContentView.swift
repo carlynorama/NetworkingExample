@@ -34,7 +34,7 @@ struct ContentView: View {
         VStack {
             Text(userName)
             Button("Fetch User") {
-                updateView()
+                getUser()
             }
             List(results, id: \.trackId) { item in
                         VStack(alignment: .leading) {
@@ -48,8 +48,7 @@ struct ContentView: View {
         }
     }
     
-    func updateView() {
-        
+    func getUser() {
         do {
             let url = try UserAPI(
                      scheme: "https",
@@ -67,12 +66,8 @@ struct ContentView: View {
     }
     
     func loadData() async {
-        guard let url = URL(string: "https://itunes.apple.com/search?term=taylor+swift&entity=song") else {
-            print("Invalid URL")
-            return
-        }
-        
         do {
+            let url = try SongFetcherAPI(scheme: "https", host: "itunes.apple.com").searchURL()
             let (data, _) = try await URLSession.shared.data(from: url)
             if let decodedResponse = try? JSONDecoder().decode(Response.self, from: data) {
                 results = decodedResponse.results

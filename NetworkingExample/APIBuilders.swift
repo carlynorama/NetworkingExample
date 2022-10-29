@@ -19,10 +19,7 @@ enum APIError: Error, CustomStringConvertible {
     }
 }
 
-struct Endpoint {
-    let path: String
-    let queryItems: [URLQueryItem]
-}
+
 
 //"https://www.hackingwithswift.com/samples/user-24601.json"
 struct UserAPI {
@@ -44,4 +41,54 @@ struct UserAPI {
         return url
     }
 }
+
+//"https://itunes.apple.com/search?term=taylor+swift&entity=song"
+struct SongFetcherAPI {
+    let scheme:String
+    let host:String
+        
+    struct Endpoint {
+        let path: String
+        let queryItems: [URLQueryItem]
+    }
+    
+    enum ItemType:String {
+        case song
+        case artist
+        case album
+    }
+    
+    func searchURL() throws -> URL {
+        try urlFrom(endpoint: Endpoint.search(cleanText: "Taylor+Swift", type: .song))
+    }
+    
+    func urlFrom(endpoint:Endpoint) throws -> URL {
+        var components = URLComponents()
+        components.scheme = scheme
+        components.host = host
+        components.path = endpoint.path
+        components.queryItems = endpoint.queryItems
+        guard let url = components.url else {
+            throw APIError("Invalid url for endpoint")
+        }
+        return url
+    }
+}
+
+
+
+extension SongFetcherAPI.Endpoint {
+    static func search(cleanText:String, type:SongFetcherAPI.ItemType) -> Self {
+        return Self(
+                    path: "/search",
+                    queryItems: [
+                        URLQueryItem(name: "term", value: cleanText),
+                        URLQueryItem(name: "entity", value: type.rawValue)
+                    ]
+                )
+    }
+}
+
+
+
 
