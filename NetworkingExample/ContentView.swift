@@ -30,7 +30,7 @@ struct ContentView: View {
     @State private var results = [Song]()
     
     var searchText = "Tayl-or <   Swi{ft "
-    var responseService = ResponseService()
+    var responseService = RequestService()
     
     @State var userName = ""
     
