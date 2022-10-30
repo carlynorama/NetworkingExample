@@ -81,6 +81,9 @@ struct ContentView: View {
              //TODO: Manage this task better
              Task {
                  userName = try await responseService.fetchValue(ofType: User.self, from: url).name
+                 
+//                 let test = try await responseService.fetchDictionary(from: url)
+//                 print(test)
              }
             
         } catch {
@@ -93,6 +96,8 @@ struct ContentView: View {
         do {
             let url = try SongFetcherAPI(scheme: "https", host: "itunes.apple.com").songSearchURL(rawString:searchText)
             results = try await responseService.fetchValue(ofType: SongSearchResponse.self, from: url).results
+//            let test = try await responseService.fetchDictionary(from: url)
+//            print(test)
         } catch {
             print("Invalid data")
         }

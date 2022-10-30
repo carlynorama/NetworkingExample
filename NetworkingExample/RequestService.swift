@@ -2,7 +2,7 @@
 //  ResponseService.swift
 //  NetworkingExample
 //
-//  Created by Labtanza on 10/29/22.
+//  Created by Carlyn Maw on 10/29/22.
 //
 
 import Foundation
@@ -23,12 +23,36 @@ actor RequestService {
     private let decoder = JSONDecoder()
     private let session = URLSession.shared
     
+    func serverHello(from url:URL) async throws -> String {
+        let (_, response) = try await session.data(from: url)  //TODO: catch the error here
+        //print(response)
+        let (isValid, mimeType) = checkForValidHTTP(response)
+        return "The url returns a \(isValid ? "valid":"invalid") HTTP response\(isValid ? " of type \(mimeType ?? "unknown")":".")"
+    }
+    
     func fetchRawString(from:URL, encoding:String.Encoding = .utf8) async throws -> String {
         let (data, _) = try await session.data(from: from)
         guard let string = String(data: data, encoding: encoding) else {
-            throw RequestServiceError("Got data, couldn't't make a string with \(encoding)")
+            throw RequestServiceError("Got data, couldn't make a string with \(encoding)")
         }
         return string
+    }
+    
+    func fetchDictionary(from url:URL) async throws -> [String: Any]? {
+        let (data, response) = try await session.data(from: url)  //TODO: catch the error here
+//        print(response)
+        guard checkForValidHTTP(response).isValid else {
+            throw RequestServiceError("Not valid HTTP")
+        }
+        do {
+            let result = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+            print(result)
+            return result as? [String:AnyObject]
+        } catch {
+            print(error)
+            return nil
+        }
+        
     }
     
     func fetchValue<SomeDecodable: Decodable>(ofType:SomeDecodable.Type, from url:URL) async throws -> SomeDecodable {
@@ -67,4 +91,5 @@ actor RequestService {
     func handleServerError(_ response:URLResponse) {
         print(response)
     }
+    
 }
