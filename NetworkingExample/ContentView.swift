@@ -29,18 +29,26 @@ struct User:Decodable {
 struct ContentView: View {
     @State private var results = [Song]()
     
-    var searchText = "Tayl-or <   Swi{ft "
+    var searchText = "Taylor Swift"
     var responseService = RequestService()
     
     @State var userName = ""
     
+    var multiFetcher = MultiFetch()
+    @State var currentUser:MFUser? = nil
+    
     var body: some View {
         VStack {
-            Text(searchText.searchSanitized()).border(.black)
+
+            Text("Task Group Example:\(currentUser?.username ?? "No one yet")")
+            
+            
             Text(userName)
             Button("Fetch User") {
                 getUser()
             }
+            
+            //Text(searchText.searchSanitized()).border(.black)
             List(results, id: \.trackId) { item in
                         VStack(alignment: .leading) {
                             Text(item.trackName)
@@ -51,11 +59,18 @@ struct ContentView: View {
         }.task {
             await loadData()
         }
+        .task {
+            await getMultiFetchUser()
+        }
     }
     
 //    func clean(_ input:String) -> String {
 //        
 //    }
+    
+    func getMultiFetchUser() async {
+        currentUser = await multiFetcher.loadUser()
+    }
     
     func getUser() {
         do {
@@ -76,7 +91,7 @@ struct ContentView: View {
     
     func loadData() async {
         do {
-            let url = try SongFetcherAPI(scheme: "https", host: "itunes.apple.com").searchURL()
+            let url = try SongFetcherAPI(scheme: "https", host: "itunes.apple.com").songSearchURL(rawString:searchText)
             results = try await responseService.fetchValue(ofType: SongSearchResponse.self, from: url).results
         } catch {
             print("Invalid data")

@@ -56,13 +56,18 @@ struct SongFetcherAPI {
         case song
         case artist
         case album
+        case any
     }
     
-    func searchURL() throws -> URL {
-        try urlFrom(endpoint: Endpoint.search(cleanText: "Tay>>{lor Swift", type: .song))
+    func songSearchURL(rawString:String) throws -> URL {
+        try urlFrom(endpoint: Endpoint.search(cleanText: rawString.searchSanitized(), type: .song))
     }
     
-    func urlFrom(endpoint:Endpoint) throws -> URL {
+    private func searchURL(rawString:String, resultType:ItemType) throws -> URL {
+        try urlFrom(endpoint: Endpoint.search(cleanText: rawString.searchSanitized(), type: resultType))
+    }
+    
+    private func urlFrom(endpoint:Endpoint) throws -> URL {
         var components = URLComponents()
         components.scheme = scheme
         components.host = host
@@ -85,6 +90,19 @@ extension SongFetcherAPI.Endpoint {
                         URLQueryItem(name: "entity", value: type.rawValue)
                     ]
                 )
+    }
+}
+
+fileprivate extension String {
+    func searchSanitized() -> Self {
+        let oneOrMoreWhiteSpace = /\s+/
+        //let reservedCharacters = /[:\/?#\[\]@!$&'()*+,;=]/
+        //let unsafeCharacters = /["<>%{}|\\^`]/
+        let invertedSafeAndWhiteSpace = /[^-._~0-9a-zA-Z\s]/
+        return self.trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacing(invertedSafeAndWhiteSpace, with: "")
+            //.replacing(reservedCharacters, with: "")
+            .replacing(oneOrMoreWhiteSpace, with: "+")
     }
 }
 

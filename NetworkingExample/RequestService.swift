@@ -23,12 +23,24 @@ actor RequestService {
     private let decoder = JSONDecoder()
     private let session = URLSession.shared
     
-    @MainActor
+    func fetchAsString(url:URL, encoding:String.Encoding = .utf8) async throws -> String {
+        let (data, _) = try await session.data(from: url)
+        guard let string = String(data: data, encoding: encoding) else {
+            throw RequestServiceError("Couldn't make a string")
+        }
+        return string
+    }
+    
     func fetchValue<SomeDecodable: Decodable>(ofType:SomeDecodable.Type, from url:URL) async throws -> SomeDecodable {
-        let (data, response) = try await session.data(from: url)
-        guard await checkForValidHTTP(response).isValid else {
+        let (data, response) = try await session.data(from: url)  //TODO: catch the error here
+//        print(response)
+        guard checkForValidHTTP(response).isValid else {
             throw RequestServiceError("Not valid HTTP")
         }
+//        if let string = String(data: data, encoding: .utf8) {
+//            print(string)
+//        }
+        
         let decoded = try decoder.decode(SomeDecodable.self, from: data)
         return decoded
     }
@@ -38,7 +50,10 @@ actor RequestService {
         from url:URL,
         transform: @escaping (SomeDecodable) throws -> Transformed
     ) async throws -> Transformed {
-        let (data, _) = try await session.data(from: url)
+        let (data, response) = try await session.data(from: url)  //TODO: catch the error here
+        guard checkForValidHTTP(response).isValid else {
+            throw RequestServiceError("Not valid HTTP")
+        }
         let decoded = try decoder.decode(SomeDecodable.self, from: data)
         return try transform(decoded)
     }
@@ -49,6 +64,7 @@ actor RequestService {
                     self.handleServerError(response)
                     return (false, nil)
         }
+
         return (true, httpResponse.mimeType)
     }
     

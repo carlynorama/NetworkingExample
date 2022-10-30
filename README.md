@@ -1,5 +1,8 @@
 #  Networking Examples
 
+Seeing about built in features.
+If you need more use https://github.com/Alamofire/
+
 ## Resources
 
 - https://developer.apple.com/documentation/foundation/url_loading_system/fetching_website_data_into_memory
