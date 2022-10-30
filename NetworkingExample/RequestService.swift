@@ -23,10 +23,10 @@ actor RequestService {
     private let decoder = JSONDecoder()
     private let session = URLSession.shared
     
-    func fetchAsString(url:URL, encoding:String.Encoding = .utf8) async throws -> String {
-        let (data, _) = try await session.data(from: url)
+    func fetchRawString(from:URL, encoding:String.Encoding = .utf8) async throws -> String {
+        let (data, _) = try await session.data(from: from)
         guard let string = String(data: data, encoding: encoding) else {
-            throw RequestServiceError("Couldn't make a string")
+            throw RequestServiceError("Got data, couldn't't make a string with \(encoding)")
         }
         return string
     }
@@ -50,11 +50,7 @@ actor RequestService {
         from url:URL,
         transform: @escaping (SomeDecodable) throws -> Transformed
     ) async throws -> Transformed {
-        let (data, response) = try await session.data(from: url)  //TODO: catch the error here
-        guard checkForValidHTTP(response).isValid else {
-            throw RequestServiceError("Not valid HTTP")
-        }
-        let decoded = try decoder.decode(SomeDecodable.self, from: data)
+        let decoded = try await fetchValue(ofType: ofType, from: url)
         return try transform(decoded)
     }
     
