@@ -59,7 +59,7 @@ struct SongFetcherAPI {
     }
     
     func searchURL() throws -> URL {
-        try urlFrom(endpoint: Endpoint.search(cleanText: "Taylor+Swift", type: .song))
+        try urlFrom(endpoint: Endpoint.search(cleanText: "Tay>>{lor Swift", type: .song))
     }
     
     func urlFrom(endpoint:Endpoint) throws -> URL {
@@ -71,11 +71,10 @@ struct SongFetcherAPI {
         guard let url = components.url else {
             throw APIError("Invalid url for endpoint")
         }
+        print(url)
         return url
     }
 }
-
-
 
 extension SongFetcherAPI.Endpoint {
     static func search(cleanText:String, type:SongFetcherAPI.ItemType) -> Self {

@@ -24,16 +24,19 @@ struct User:Decodable {
     static let `default` = User(id: UUID(), name: "Anonymouse")
 }
 
+
+
 struct ContentView: View {
     @State private var results = [Song]()
     
-    
+    var searchText = "Tayl-or <   Swi{ft "
     var responseService = ResponseService()
     
     @State var userName = ""
     
     var body: some View {
         VStack {
+            Text(searchText.searchSanitized()).border(.black)
             Text(userName)
             Button("Fetch User") {
                 getUser()
@@ -49,6 +52,10 @@ struct ContentView: View {
             await loadData()
         }
     }
+    
+//    func clean(_ input:String) -> String {
+//        
+//    }
     
     func getUser() {
         do {

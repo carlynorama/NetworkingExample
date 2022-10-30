@@ -14,6 +14,7 @@
 		DAF8A6E4290DB94600E093C0 /* Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF8A6E3290DB94600E093C0 /* Items.swift */; };
 		DAF8A6E8290DBF8600E093C0 /* ResponseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF8A6E7290DBF8600E093C0 /* ResponseService.swift */; };
 		DAF8A6EB290DD0E700E093C0 /* APIBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF8A6EA290DD0E700E093C0 /* APIBuilders.swift */; };
+		DAF8A6ED290DF7C400E093C0 /* Sanitized.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF8A6EC290DF7C400E093C0 /* Sanitized.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		DAF8A6E7290DBF8600E093C0 /* ResponseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseService.swift; sourceTree = "<group>"; };
 		DAF8A6E9290DC7D200E093C0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DAF8A6EA290DD0E700E093C0 /* APIBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIBuilders.swift; sourceTree = "<group>"; };
+		DAF8A6EC290DF7C400E093C0 /* Sanitized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sanitized.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 			children = (
 				DAF8A6D5290DB8EF00E093C0 /* NetworkingExampleApp.swift */,
 				DAF8A6D7290DB8EF00E093C0 /* ContentView.swift */,
+				DAF8A6EC290DF7C400E093C0 /* Sanitized.swift */,
 				DAF8A6E7290DBF8600E093C0 /* ResponseService.swift */,
 				DAF8A6EA290DD0E700E093C0 /* APIBuilders.swift */,
 				DAF8A6E3290DB94600E093C0 /* Items.swift */,
@@ -153,6 +156,7 @@
 				DAF8A6D8290DB8EF00E093C0 /* ContentView.swift in Sources */,
 				DAF8A6E4290DB94600E093C0 /* Items.swift in Sources */,
 				DAF8A6D6290DB8EF00E093C0 /* NetworkingExampleApp.swift in Sources */,
+				DAF8A6ED290DF7C400E093C0 /* Sanitized.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
