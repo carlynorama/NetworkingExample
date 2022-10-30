@@ -35,7 +35,7 @@ struct MultiFetch {
         let user = await withThrowingTaskGroup(of: MFFetchResult.self) { group -> MFUser in
             group.addTask {
                 let url = URL(string: "https://hws.dev/username.json")!
-                let result = try await requestService.fetchAsString(url: url)
+                let result = try await requestService.fetchRawString(from: url)
                 print(result)
                 return .username(result)
             }
